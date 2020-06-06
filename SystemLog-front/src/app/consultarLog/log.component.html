@@ -1,0 +1,110 @@
+<p-toast
+  [style]="{marginTop: '80px'}"
+  position="top-right"
+  key="myKey"
+  hideTransitionOptions="1000ms ease-in">
+</p-toast>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+      <p-progressBar mode="indeterminate" [style]="{'height': '6px'}" *ngIf="showProgressBar"></p-progressBar>
+
+      <div class="ui-g">
+        <div class="ui-g-8">
+          <div>
+            <button type="button" (click)="showModalDialog()" pButton icon="pi pi-plus" label="Incluir Log"></button>
+          </div>
+        </div>
+      </div>
+
+      <p-fieldset legend="Filtros">
+        <div class="row">
+          <div class="col-12">
+           
+            <div>      
+              <div>
+                <label for="">Data do Log:</label>&nbsp;
+                <p-calendar [(ngModel)]="dtInsersaoInicio" [showTime]="true"></p-calendar>
+                <span style="padding: 0 10px;">até</span>
+                <p-calendar [(ngModel)]="dtInsersaoFim" [showTime]="true"></p-calendar>
+
+                <span style="padding: 0 30px;"></span>
+                <label for="">IP Inserção:</label>&nbsp;
+                <input type="text" [(ngModel)]="ip" pInputText />
+
+                <span style="padding: 0 30px;"></span>
+                <label for="">User - Agent:</label>&nbsp;
+                <input type="text" [(ngModel)]="userAgent" pInputText />
+
+                <span style="padding: 0 30px;"></span>
+                <button pButton  label="Limpar" (click)="limparFiltro()"  class="mg-button" ></button>
+                <span style="padding: 0 5px;"></span>
+                <button pButton  label="Pesquisar" icon="pi pi-search" iconPos="left" (click)="consultarLogs()" class="buttonPesquisar" ></button>
+              </div>
+            </div>  
+
+          </div>
+        </div>
+      </p-fieldset>
+    </div>
+
+    <div class="form-group" style="width: 100%;">
+      <div>
+        <p-table 
+        [value]="listaLogs" 
+        [paginator]="true"
+        [responsive]="true"
+        autoLayout="true" [rows]="10">
+          
+          <ng-template pTemplate="header" >
+              <tr>
+                <th>Data Log</th>
+                <th>Ip</th>
+                <th>User-Agent</th>
+                <th style="width: 80px;">Ação</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-dados>
+              <tr>
+                  <td>{{ dados.dataFormatada }}</td>
+                  <td>{{ dados.ip }}</td>
+                  <td>{{ dados.userAgent }}</td>
+                  <td class="text-center">
+                    <a href="javascript:;" (click)="excluirLog(dados)" class="btn-link">
+                      <i class="fa fa-trash" pTooltip="Excluir Log" tooltipPosition="top"></i>
+                    </a>
+                    <span style="padding: 0 5px;"></span>
+                    <a href="javascript:;" (click)="visualizar(dados)" class="btn-link">
+                      <i class="fa fa-search" pTooltip="Visualizar Log" tooltipPosition="top" ></i>
+                    </a>
+
+                  </td>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-column >
+            <tr>
+              <td [attr.colspan]="5" >
+                <label class="label-bold" >Nenhum log encontrado</label>
+              </td>
+            </tr>
+          </ng-template>
+  
+          <ng-template pTemplate="paginatorright" let-table>
+            <label class="label-bold" >Total de Registros: </label> {{listaLogs.length}}
+          </ng-template>      
+      </p-table>
+      </div>
+    </div>
+
+
+  </div>
+
+  <p-dialog [(visible)]="displayModal" width="600" height="auto" modal="modal">
+    <app-modal-log
+    [dadosLog]="dadosLog"
+    [listLogs]="listLogs"
+    (respostaConsultar)="pesquisarNovamente($event)"></app-modal-log>
+  </p-dialog>
+  
+
+  

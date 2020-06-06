@@ -1,0 +1,148 @@
+<p-toast
+  [style]="{marginTop: '80px'}"
+  position="top-right"
+  key="erroModal"
+  hideTransitionOptions="1000ms ease-in">
+</p-toast>
+
+<div class="ui-g"  *ngIf="dadosLog != null">
+    <div class="ui-g-12">
+
+        <div class="form-group col-12 mt-2">
+          <div>
+            <p-table 
+            [value]="listLogs" 
+            [paginator]="true"
+            [responsive]="true"
+            autoLayout="true" [rows]="5">
+              
+              <ng-template pTemplate="header" >
+                  <tr>
+                    <th>Nome Arquivo</th>
+                    <th style="width: 80px;">Ação</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-log>
+                  <tr>
+                      <td>{{ log.nome }}</td>
+                      <td class="text-center">
+                        <a href="javascript:;" (click)="baixarArquivo(log)" class="btn-link">
+                          <i class="fa fa-download" pTooltip="Baixar Arquivo" tooltipPosition="top" ></i>
+                        </a>
+                      </td>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage" let-column >
+                <tr>
+                  <td [attr.colspan]="5" >
+                    <label class="label-bold" >Nenhum arquivo selecionado</label>
+                  </td>
+                </tr>
+              </ng-template>
+      
+              <ng-template pTemplate="paginatorright" let-table>
+                <label class="label-bold" >Total de Registros: </label> {{uploadedFiles.length}}
+              </ng-template>      
+          </p-table>
+          </div>
+        </div>
+
+    </div>
+  </div>
+  
+
+  <div class="ui-g"  *ngIf="dadosLog == null">
+    <div class="ui-g-12">
+      <p-progressBar mode="indeterminate" [style]="{'height': '6px'}" *ngIf="showProgressBar"></p-progressBar>
+
+      <div class="ui-g">
+        <div class="ui-g-8">
+          <div>
+            <p-selectButton [options]="types" [(ngModel)]="selectedType"></p-selectButton>
+          </div>
+        </div>
+      </div>
+
+        <div class="ui-g" *ngIf="selectedType == 'Upload'" >
+          <div class="ui-g-8">
+            <div>
+              <button type="button" style="height:30;width: 150;"   pButton>
+                <label for="arquivos"> Escolher Arquivo </label>
+              </button>
+              <input id="arquivos" type="file" hidden name="arquivos" accept=".log" (change)="selecionarArquivo($event)" multiple  style="width: 100%" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-12 mt-2" *ngIf="selectedType == 'Upload'">
+          <div>
+            <p-table 
+            [value]="uploadedFiles" 
+            [paginator]="true"
+            [responsive]="true"
+            autoLayout="true" [rows]="5">
+              
+              <ng-template pTemplate="header" >
+                  <tr>
+                    <th>Arquivo</th>
+                    <th style="width: 80px;">Ação</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-arquivo>
+                  <tr>
+                      <td>{{ arquivo.name }}</td>
+                      <td class="text-center">
+                        <a href="javascript:;" (click)="excluirArquivo(arquivo)" class="btn-link">
+                          <i class="fa fa-trash" ngbTooltip="Excluir Anexo"></i>
+                        </a>
+                      </td>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage" let-column >
+                <tr>
+                  <td [attr.colspan]="5" >
+                    <label class="label-bold" >Nenhum arquivo selecionado</label>
+                  </td>
+                </tr>
+              </ng-template>
+      
+              <ng-template pTemplate="paginatorright" let-table>
+                <label class="label-bold" >Total de Registros: </label> {{uploadedFiles.length}}
+              </ng-template>      
+          </p-table>
+          </div>
+        </div>
+
+        <div class="ui-g" *ngIf="selectedType == 'Manual'"  >
+          <div class="ui-g-8">
+            <div>
+              <textarea [rows]="15" [cols]="85"  placeholder="Texto Log" pInputTextarea [(ngModel)]="textoLog"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="ui-g" style="text-align: right; margin: 15px 0;">
+          <div class="ui-g-12">
+            <button
+              pButton
+              style="margin-right: 10px;"
+              type="button"
+              label="Limpar"
+              class="mg-button"
+              (click)="limpar()">
+            </button>
+        
+            <button
+              pButton
+              type="button"
+              label="Salvar"
+              class="ui-button-success"
+              (click)="salvarLogs()"
+              icon="pi pi-save">
+            </button>
+          </div>
+        </div>
+        
+
+    </div>
+  </div>
