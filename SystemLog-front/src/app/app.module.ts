@@ -19,6 +19,8 @@ import { TableModule } from 'primeng/table';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {CalendarModule} from 'primeng/calendar';
 import {TooltipModule} from 'primeng/tooltip';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import {TooltipModule} from 'primeng/tooltip';
     TableModule,
     SelectButtonModule,
     CalendarModule,
-    TooltipModule
+    TooltipModule,
+    ConfirmDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
