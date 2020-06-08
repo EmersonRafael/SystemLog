@@ -31,7 +31,7 @@ public class LogControle {
 	@Autowired
 	LogServico logServico;
 
-	@GetMapping("/versao")
+	@GetMapping("/versao/")
 	public String versao() {
 		return "1.0 - Teste Sistema de Log";
 	}
