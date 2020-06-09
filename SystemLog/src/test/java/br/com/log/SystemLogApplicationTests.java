@@ -3,7 +3,6 @@ package br.com.log;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +11,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.log.controle.LogControle;
 import com.log.servico.LogServico;
@@ -61,6 +63,16 @@ public class SystemLogApplicationTests {
 	}
 	
 	@Test
+	public void salvarLog() throws Exception {
+		MockMultipartFile mockFile = new MockMultipartFile("file", "teste".getBytes());
+
+		 mockMvc.perform(
+				 MockMvcRequestBuilders.multipart("/api/salvar-log/1").file(mockFile).content("teste")
+	                        .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+	}
+	
+	
+	@Test
 	public void salvarLogTexto() throws Exception {
 		 mockMvc.perform(
 	                post("/api/salvar-log-texto/").content("teste")
@@ -76,12 +88,8 @@ public class SystemLogApplicationTests {
 	
 	@Test
 	public void baixarArquivoLog() throws Exception {
-		 byte[] anyBytes = new byte[]{};
 		 mockMvc.perform(
-	                get("/api/baixar-arquivo-log/82")
-	                        .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-		 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
-         .andExpect(content().bytes(anyBytes));
+	                get("/api/baixar-arquivo-log/82").contentType(MediaType.APPLICATION_OCTET_STREAM)).andExpect(MockMvcResultMatchers.status().is(200)).andReturn();
 	}
 	
 	

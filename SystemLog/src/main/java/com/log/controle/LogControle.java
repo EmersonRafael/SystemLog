@@ -113,11 +113,17 @@ public class LogControle {
 	public ResponseEntity<byte[]> baixarArquivoLog(@PathVariable(value = "idLog") Long idLog) {
 
 		Log log = logServico.consultarLogPorId(idLog);
-		byte[] arquivoBytes = log.getArquivoLog();
+		byte[] arquivoBytes = new byte[1024];
+		String nome = "arquivoNaoEncontrado.txt";
+		
+		if(log != null) {
+			arquivoBytes = log.getArquivoLog();
+			nome = log.getNomeLog();
+		}
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		headers.add("Content-Disposition", "filename=" + log.getNomeLog());
+		headers.add("Content-Disposition", "filename="+ nome);
 
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 		ResponseEntity<byte[]> response = new ResponseEntity<>(arquivoBytes, headers, HttpStatus.OK);
